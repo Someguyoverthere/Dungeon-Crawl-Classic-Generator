@@ -6,11 +6,11 @@ package com.github.someguyoverthere.dccgen;
 public class Roller {
 	
 	/**
-	 * Roll.
+	 * Rolls dice and places the values into an array.
 	 *
-	 * @param diceNum the dice num
-	 * @param diceSize the dice size
-	 * @return the int[]
+	 * @param diceNum Number of dice rolled
+	 * @param diceSize the maximum roll possible on each die
+	 * @return The dice rolls in the form of an array
 	 */
 	public static int[] rollSet(int diceNum, int diceSize) {
 		int[] rolls = new int[diceNum];
@@ -22,6 +22,14 @@ public class Roller {
 		return rolls;
 		
 	}
+	
+	/**
+	 * Rolls dice and returns the cumulative value of the rolls.
+	 *
+	 * @param diceNum Number of dice rolled
+	 * @param diceSize the maximum roll possible on each die
+	 * @return returns the cumulative value of the rolls
+	 */
 	public static int rollSingle(int diceNum, int diceSize) {
 		int total = 0;
 		for(int i = 0; i < diceNum; i++) {

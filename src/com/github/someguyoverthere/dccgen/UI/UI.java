@@ -23,7 +23,9 @@ import org.eclipse.swt.widgets.Spinner;
 
 import java.awt.Container;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -50,6 +52,7 @@ public class UI {
 	File trainedWeapon;
 	File equipment;
 	File birthSign;
+	File output;
 
 	Boolean occupationLoaded = false;
 	Boolean tradeGoodLoaded = false;
@@ -57,8 +60,8 @@ public class UI {
 	Boolean equipmentLoaded = false;
 	Boolean birthSignLoaded = false;
 	Boolean outputPathSelected = false;
-	
-	
+
+	String outputDir;
 
 	/**
 	 * Launch the application.
@@ -109,6 +112,7 @@ public class UI {
 				"6d6/2 (Average Joe)" });
 		abilityScoreSpinner.setBounds(269, 15, 243, 21);// end ability score options
 		abilityScoreSpinner.select(0);
+		abilityScoreSpinner.setEditable(false);
 
 		Label lblHowWouldYou_1 = new Label(shell, SWT.NONE);
 		lblHowWouldYou_1.setBounds(10, 51, 253, 15);
@@ -119,6 +123,7 @@ public class UI {
 				"1d4+2 (snake)", "Max" });
 		hitPointSpinner.setBounds(269, 48, 117, 21);// end HP options
 		hitPointSpinner.select(0);
+		hitPointSpinner.setEditable(false);
 
 		Label lblNewLabel = new Label(shell, SWT.NONE);
 		lblNewLabel.setBounds(10, 78, 274, 15);
@@ -128,70 +133,10 @@ public class UI {
 		numOfCharacters.setSelection(4);
 		numOfCharacters.setBounds(290, 75, 44, 22);
 		formToolkit.adapt(numOfCharacters);
-		formToolkit.paintBordersFor(numOfCharacters);// end number of characters
-
-		Label lblOccupationNotLoaded = new Label(shell, SWT.NONE);
-		lblOccupationNotLoaded.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		lblOccupationNotLoaded.setEnabled(true);
-		lblOccupationNotLoaded.setToolTipText("Please load an occupation list.");
-		lblOccupationNotLoaded.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-		lblOccupationNotLoaded.setForeground(SWTResourceManager.getColor(208, 0, 0));
-		lblOccupationNotLoaded.setBounds(493, 220, 75, 15);
-		formToolkit.adapt(lblOccupationNotLoaded, true, true);
-		lblOccupationNotLoaded.setText("Not Loaded!");
-		lblOccupationNotLoaded.setVisible(false);
-
-		Label lblTradeGoodNotLoaded = new Label(shell, SWT.NONE);
-		lblTradeGoodNotLoaded.setToolTipText("Please load an occupation list.");
-		lblTradeGoodNotLoaded.setText("Not Loaded!");
-		lblTradeGoodNotLoaded.setForeground(SWTResourceManager.getColor(208, 0, 0));
-		lblTradeGoodNotLoaded.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-		lblTradeGoodNotLoaded.setEnabled(true);
-		lblTradeGoodNotLoaded.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		lblTradeGoodNotLoaded.setBounds(493, 152, 75, 15);
-		formToolkit.adapt(lblTradeGoodNotLoaded, true, true);
-		lblTradeGoodNotLoaded.setVisible(false);
-
-		Label lblTrainedWeaponNotLoaded = new Label(shell, SWT.NONE);
-		lblTrainedWeaponNotLoaded.setToolTipText("Please load an occupation list.");
-		lblTrainedWeaponNotLoaded.setText("Not Loaded!");
-		lblTrainedWeaponNotLoaded.setForeground(SWTResourceManager.getColor(208, 0, 0));
-		lblTrainedWeaponNotLoaded.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-		lblTrainedWeaponNotLoaded.setEnabled(true);
-		lblTrainedWeaponNotLoaded.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		lblTrainedWeaponNotLoaded.setBounds(493, 186, 75, 15);
-		formToolkit.adapt(lblTrainedWeaponNotLoaded, true, true);
-		lblTrainedWeaponNotLoaded.setVisible(false);
-
-		Label lblEquipmentNotLoaded = new Label(shell, SWT.NONE);
-		lblEquipmentNotLoaded.setVisible(false);
-		lblEquipmentNotLoaded.setToolTipText("Please load an occupation list.");
-		lblEquipmentNotLoaded.setText("Not Loaded!");
-		lblEquipmentNotLoaded.setForeground(SWTResourceManager.getColor(208, 0, 0));
-		lblEquipmentNotLoaded.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-		lblEquipmentNotLoaded.setEnabled(true);
-		lblEquipmentNotLoaded.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		lblEquipmentNotLoaded.setBounds(493, 252, 75, 15);
-		formToolkit.adapt(lblEquipmentNotLoaded, true, true);
-
-		
-		
-		Label lblBirthSignNotLoaded = new Label(shell, SWT.NONE);
-		lblBirthSignNotLoaded.setVisible(false);
-		lblBirthSignNotLoaded.setToolTipText("Please load an occupation list.");
-		lblBirthSignNotLoaded.setText("Not Loaded!");
-		lblBirthSignNotLoaded.setForeground(SWTResourceManager.getColor(208, 0, 0));
-		lblBirthSignNotLoaded.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
-		lblBirthSignNotLoaded.setEnabled(true);
-		lblBirthSignNotLoaded.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		lblBirthSignNotLoaded.setBounds(493, 283, 75, 15);
-		formToolkit.adapt(lblBirthSignNotLoaded, true, true);
-
-		Button btnBringOutMy = formToolkit.createButton(shell, "BRING OUT MY DEAD", SWT.NONE);
-
-		
+		formToolkit.paintBordersFor(numOfCharacters);
 
 		Label lblOccupationList = new Label(shell, SWT.NONE);
+		lblOccupationList.setBackground(SWTResourceManager.getColor(44, 49, 53));
 		lblOccupationList.setText("Occupation List:");
 		lblOccupationList.setBounds(10, 111, 91, 15);
 		formToolkit.adapt(lblOccupationList, true, true);
@@ -215,6 +160,7 @@ public class UI {
 			public void widgetSelected(SelectionEvent e) {
 
 				chooser.addChoosableFileFilter(filter);
+				chooser.setDialogTitle("Please select the Occupations file.");
 				int returnVal = chooser.showOpenDialog(chooser);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					occupation = chooser.getSelectedFile();
@@ -238,6 +184,7 @@ public class UI {
 			public void widgetSelected(SelectionEvent e) {
 
 				chooser.addChoosableFileFilter(filter);
+				chooser.setDialogTitle("Please select the Trade Goods file.");
 				int returnVal = chooser.showOpenDialog(chooser);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					tradeGood = chooser.getSelectedFile();
@@ -260,6 +207,7 @@ public class UI {
 			public void widgetSelected(SelectionEvent e) {
 
 				chooser.addChoosableFileFilter(filter);
+				chooser.setDialogTitle("Please select the Trained Weapon file.");
 				int returnVal = chooser.showOpenDialog(chooser);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					trainedWeapon = chooser.getSelectedFile();
@@ -303,6 +251,7 @@ public class UI {
 			public void widgetSelected(SelectionEvent e) {
 
 				chooser.addChoosableFileFilter(filter);
+				chooser.setDialogTitle("Please select the equipment file.");
 				int returnVal = chooser.showOpenDialog(chooser);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					equipment = chooser.getSelectedFile();
@@ -329,16 +278,34 @@ public class UI {
 		birthSignBrowse.setText("Browse");
 		birthSignBrowse.setBounds(399, 241, 75, 25);
 		formToolkit.adapt(birthSignBrowse, true, true);
-		
+		birthSignBrowse.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chooser.addChoosableFileFilter(filter);
+				chooser.setDialogTitle("Please select the birth sign file.");
+				int returnVal = chooser.showOpenDialog(chooser);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					birthSign = chooser.getSelectedFile();
+					birthSignPath.setText(birthSign.getAbsolutePath());
+					birthSignLoaded = true;
+				}
+				if (returnVal == JFileChooser.CANCEL_OPTION) {
+
+				}
+			}
+
+		});
+
 		Label lblOutputDirectory = new Label(shell, SWT.NONE);
 		lblOutputDirectory.setText("Output Directory:");
 		lblOutputDirectory.setBounds(10, 272, 117, 15);
 		formToolkit.adapt(lblOutputDirectory, true, true);
-		
+
 		outputPath = new Text(shell, SWT.BORDER);
 		outputPath.setBounds(137, 272, 243, 21);
 		formToolkit.adapt(outputPath, true, true);
-		
+
 		Button outputBrowse = new Button(shell, SWT.NONE);
 		outputBrowse.setText("Browse");
 		outputBrowse.setBounds(399, 272, 75, 25);
@@ -347,22 +314,23 @@ public class UI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				chooser.setDialogTitle("Where would you like to save your dead?");
+
+				int userSelection = chooser.showSaveDialog(chooser);
 				chooser.addChoosableFileFilter(filter);
-				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int returnVal = chooser.showOpenDialog(chooser);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					outputPath.setText(equipment.getAbsolutePath());
+
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+					output = chooser.getSelectedFile();
+					outputPath.setText(output.getAbsolutePath());
 					outputPathSelected = true;
-				}
-				if (returnVal == JFileChooser.CANCEL_OPTION) {
 
 				}
+
 			}
 
 		});
-		
-		
-		
+
+		Button btnBringOutMy = formToolkit.createButton(shell, "BRING OUT MY DEAD", SWT.NONE);
 		btnBringOutMy.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {// function that executes character generation
@@ -381,72 +349,51 @@ public class UI {
 					occupationGeneration(characters);
 					inventoryGeneration(characters);
 					birthSignGeneration(characters);
-					exportCharacters(characters);
+					try {
+						exportCharacters(characters, output,
+								abilityScoreSpinner.getItem(abilityScoreSpinner.getSelectionIndex()),
+								hitPointSpinner.getItem(abilityScoreSpinner.getSelectionIndex()));
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
 				} else {
 					String error = "";
-					
+
 					if (occupationLoaded != true) {
-						//lblOccupationNotLoaded.setVisible(true);
 						error += "Occupation file must be loaded.\n";
 					}
 
 					if (tradeGoodLoaded != true) {
-						//lblTradeGoodNotLoaded.setVisible(true);
 						error += "Trade Goods file must be loaded.\n";
 					}
 
 					if (trainedWeaponLoaded != true) {
-						//lblTrainedWeaponNotLoaded.setVisible(true);
 						error += "Trained Weapon file must be loaded.\n";
 					}
 
 					if (equipmentLoaded != true) {
-						//lblEquipmentNotLoaded.setVisible(true);
 						error += "Equipment file must be loaded.\n";
 					}
+
 					if (birthSignLoaded != true) {
-						//lblBirthSignNotLoaded.setVisible(true);;
 						error += "Birth Sign file must be loaded.\n";
 					}
-					
-					
-					
-					JOptionPane.showMessageDialog(chooser, "The following errors have occured.\n\n" + error, "Error", JOptionPane.ERROR_MESSAGE);
-					
+
+					if (outputPathSelected != true) {
+						error += "Output file has not been selected.\n";
+					}
+
+					JOptionPane.showMessageDialog(chooser, "The following errors have occured.\n\n" + error, "Error",
+							JOptionPane.ERROR_MESSAGE);
+
 				}
 
 			}
 		});
 
 		btnBringOutMy.setBounds(20, 304, 548, 25);
-		
-		
-
-	}
-
-	/**
-	 * File browser. Deprecated
-	 *
-	 * @param chooser The fileSelector is passed through here
-	 * @return file This is the file selected by the user.
-	 */
-	public File fileBrowser(JFileChooser chooser) {
-		File file = null;
-		chooser.addChoosableFileFilter(filter);
-		// chooser.showDialog(chooser, "open");
-		int returnVal = chooser.showOpenDialog(chooser);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			file = chooser.getSelectedFile();
-			occupationPath.setText(file.getAbsolutePath());
-			occupationLoaded = true;
-			return file;
-		}
-		if (returnVal == JFileChooser.CANCEL_OPTION) {
-
-		}
-
-		return file;
 
 	}
 
@@ -722,7 +669,7 @@ public class UI {
 		ListLoader equips = new ListLoader(equipment);
 
 		for (int i = 0; i < characters.length; i++) {
-			roll = Roller.rollSingle(1, 24);
+			roll = Roller.rollSingle(1, equips.getListLength());
 			characters[i].setCopper(Roller.rollSingle(5, 12));
 			characters[i].addItem(equips.getItemAtIndex(roll));
 		}
@@ -739,7 +686,7 @@ public class UI {
 	}
 
 	/**
-	 * Generates a birthsign for the array of characters.
+	 * Generates a birth sign for the array of characters.
 	 *
 	 * @param characters The array containing characters.
 	 */
@@ -748,18 +695,47 @@ public class UI {
 		ListLoader bSign = new ListLoader(birthSign);
 		for (int i = 0; i < characters.length; i++) {
 			roll = Roller.rollSingle(1, bSign.getListLength());
-			characters[i].setBirthSign(bSign.getItemAtIndex(roll) + "(" + characters[i].getAbilityMod(characters[i].getLUK()) + ")");
+			characters[i].setBirthSign(
+					bSign.getItemAtIndex(roll) + "(" + characters[i].getAbilityMod(characters[i].getLUK()) + ")");
 
 		}
 
 	}
 
-	public void exportCharacters(PCharacter[] characters) {
-		for (int i = 0; i < characters.length; i++) {
-			PrintWriter writer;
-			//File file = "x.txt";
+	public void exportCharacters(PCharacter[] characters, File file, String rollMode, String HPMode)
+			throws FileNotFoundException {
+		PrintWriter writer = new PrintWriter(file);
 
+		for (int i = 0; i < characters.length; i++) {
+			ArrayList<String> inventory = characters[i].getInventory();
+			
+			writer.printf("Generator Settings\n");
+			writer.printf("Roll Mode: '%S' | HP Mode: '%S' \n\n", rollMode, HPMode);
+			writer.printf("Character: '%I'", characters[i].getNum());
+			writer.printf("Strength: '%I' ('%I')\n", characters[i].getSTR(),
+					characters[i].getAbilityMod(characters[i].getSTR()));
+			writer.printf("Agility: '%I' ('%I')\n", characters[i].getAGI(),
+					characters[i].getAbilityMod(characters[i].getAGI()));
+			writer.printf("Stamina: '%I' ('%I')\n", characters[i].getSTM(),
+					characters[i].getAbilityMod(characters[i].getSTM()));
+			writer.printf("Personality: '%I' ('%I')\n", characters[i].getPER(),
+					characters[i].getAbilityMod(characters[i].getPER()));
+			writer.printf("Intellegence: '%I' ('%I')\n", characters[i].getINT(),
+					characters[i].getAbilityMod(characters[i].getINT()));
+			writer.printf("Luck: '%I' ('%I')\n\n", characters[i].getLUK(),
+					characters[i].getAbilityMod(characters[i].getLUK()));
+			writer.printf("AC: '%i'; HP: '%I'\n", characters[i].getAC(), characters[i].getHP());
+			writer.printf("Speed: 30; Init: '%I'; Ref; '%I'; Fort: '%I'; Will: '%I'\n\n", characters[i].getReflex(),
+					characters[i].getReflex(), characters[i].getFort(), characters[i].getWill());
+			
+			for(int j = 0; j < inventory.size(); j++) {
+				//writer.printf("Equipment: "%S)
+			}
+			
+			
+			//writer.printf("Equipment: '%S', '%S'", characters[i])
 		}
+		writer.close();
 
 	}
 }
