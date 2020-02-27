@@ -24,8 +24,11 @@ import org.eclipse.swt.widgets.Spinner;
 import java.awt.Container;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -53,6 +56,7 @@ public class UI {
 	File equipment;
 	File birthSign;
 	File output;
+	File configFile;
 
 	Boolean occupationLoaded = false;
 	Boolean tradeGoodLoaded = false;
@@ -81,6 +85,17 @@ public class UI {
 	 * Open the window.
 	 */
 	public void open() {
+		configFile = new File("DCCGEN.properties");
+		Properties props = new Properties();
+		props.setProperty("ass", "wjhy");
+		try {
+			props.store(new FileOutputStream(configFile), null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		Display display = Display.getDefault();
 		createContents();
 		shell.open();
@@ -98,61 +113,65 @@ public class UI {
 	protected void createContents() {
 		shell = new Shell();
 		shell.setMinimumSize(new Point(500, 330));
-		shell.setSize(600, 383);
+		shell.setSize(536, 494);
 		shell.setText("Dungeon Crawl Classics Character Generator");// title bar
 
 		Label lblHowWouldYou = new Label(shell, SWT.NONE);
-		lblHowWouldYou.setBounds(10, 18, 253, 15);
+		lblHowWouldYou.setBounds(10, 18, 247, 15);
 		lblHowWouldYou.setText("How would you like to generate Ability Scores?");
 
 		CCombo abilityScoreSpinner = new CCombo(shell, SWT.BORDER);// holds the ability score generation options
+		abilityScoreSpinner.setBackground(SWTResourceManager.getColor(SWT.COLOR_TRANSPARENT));
+		abilityScoreSpinner.setForeground(SWTResourceManager.getColor(0, 0, 0));
 		abilityScoreSpinner.setItems(new String[] { "3d6 (As Crom intended)", "4d6 (Power Characters)",
 				"2d10 (Jack's Deformed/Standard Mobs)", "Tetterdamalion's Heros (3d7, 7=6)",
 				"Tatterdamalion's Gongfarmers (3d7, 7=1)", "4d7 (Supers: Sezrekan Method)", "1d16+2 (Mad O'Murrish)",
 				"6d6/2 (Average Joe)" });
-		abilityScoreSpinner.setBounds(269, 15, 243, 21);// end ability score options
+		abilityScoreSpinner.setBounds(269, 15, 248, 21);// end ability score options
 		abilityScoreSpinner.select(0);
 		abilityScoreSpinner.setEditable(false);
 
 		Label lblHowWouldYou_1 = new Label(shell, SWT.NONE);
-		lblHowWouldYou_1.setBounds(10, 51, 253, 15);
-		lblHowWouldYou_1.setText("How would you like to generate Hit Points?");
+		lblHowWouldYou_1.setBounds(10, 51, 228, 15);
+		lblHowWouldYou_1.setText("Select Hit Point generation method.");
 
 		CCombo hitPointSpinner = new CCombo(shell, SWT.BORDER);// contains hit point generation options
-		hitPointSpinner.setItems(new String[] { "1d4 (standard)", "1d4 (reroll on 1)", "2d4, keep one", "1d2+2",
-				"1d4+2 (snake)", "Max" });
-		hitPointSpinner.setBounds(269, 48, 117, 21);// end HP options
+		hitPointSpinner.setForeground(SWTResourceManager.getColor(0, 0, 0));
+		hitPointSpinner.setBackground(SWTResourceManager.getColor(SWT.COLOR_TRANSPARENT));
+		hitPointSpinner.setItems(new String[] {"1d4 (standard)", "1d4 (reroll on 1)", "2d4, keep best", "1d2+2", "1d4+2 (snake)", "Max"});
+		hitPointSpinner.setBounds(269, 48, 114, 21);// end HP options
 		hitPointSpinner.select(0);
 		hitPointSpinner.setEditable(false);
 
 		Label lblNewLabel = new Label(shell, SWT.NONE);
-		lblNewLabel.setBounds(10, 78, 274, 15);
+		lblNewLabel.setBounds(10, 78, 263, 15);
 		lblNewLabel.setText("How many characters would you like to generate?");
 
 		Spinner numOfCharacters = new Spinner(shell, SWT.BORDER);
+		numOfCharacters.setForeground(SWTResourceManager.getColor(0, 0, 0));
+		numOfCharacters.setBackground(SWTResourceManager.getColor(SWT.COLOR_TRANSPARENT));
 		numOfCharacters.setSelection(4);
 		numOfCharacters.setBounds(290, 75, 44, 22);
 		formToolkit.adapt(numOfCharacters);
 		formToolkit.paintBordersFor(numOfCharacters);
 
 		Label lblOccupationList = new Label(shell, SWT.NONE);
-		lblOccupationList.setBackground(SWTResourceManager.getColor(44, 49, 53));
 		lblOccupationList.setText("Occupation List:");
-		lblOccupationList.setBounds(10, 111, 91, 15);
+		lblOccupationList.setBounds(20, 133, 86, 15);
 		formToolkit.adapt(lblOccupationList, true, true);
 
 		Label lblTradeGoodList = new Label(shell, SWT.NONE);
 		lblTradeGoodList.setText("Trade Good List:");
-		lblTradeGoodList.setBounds(10, 145, 91, 15);
+		lblTradeGoodList.setBounds(20, 181, 86, 15);
 		formToolkit.adapt(lblTradeGoodList, true, true);
 
 		Label lblTrainedWeaponList = new Label(shell, SWT.NONE);
 		lblTrainedWeaponList.setText("Trained Weapon List:");
-		lblTrainedWeaponList.setBounds(10, 179, 117, 15);
+		lblTrainedWeaponList.setBounds(20, 229, 111, 15);
 		formToolkit.adapt(lblTrainedWeaponList, true, true);
 
 		Button occupationBrowse = new Button(shell, SWT.NONE);// Occupation browser button
-		occupationBrowse.setBounds(399, 111, 75, 25);
+		occupationBrowse.setBounds(269, 152, 50, 25);
 		formToolkit.adapt(occupationBrowse, true, true);
 		occupationBrowse.setText("Browse");
 		occupationBrowse.addSelectionListener(new SelectionAdapter() {
@@ -177,7 +196,7 @@ public class UI {
 
 		Button tradeGoodBrowse = new Button(shell, SWT.NONE);// Trade Good browser button
 		tradeGoodBrowse.setText("Browse");
-		tradeGoodBrowse.setBounds(399, 145, 75, 25);
+		tradeGoodBrowse.setBounds(269, 200, 50, 25);
 		formToolkit.adapt(tradeGoodBrowse, true, true);
 		tradeGoodBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -200,7 +219,7 @@ public class UI {
 
 		Button trainedWeaponBrowse = new Button(shell, SWT.NONE);// Trained Weapon browser button
 		trainedWeaponBrowse.setText("Browse");
-		trainedWeaponBrowse.setBounds(399, 179, 75, 25);
+		trainedWeaponBrowse.setBounds(269, 248, 50, 25);
 		formToolkit.adapt(trainedWeaponBrowse, true, true);
 		trainedWeaponBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -222,29 +241,29 @@ public class UI {
 		});
 
 		occupationPath = new Text(shell, SWT.BORDER);
-		occupationPath.setBounds(137, 111, 243, 21);
+		occupationPath.setBounds(20, 154, 243, 21);
 		formToolkit.adapt(occupationPath, true, true);
 
 		tradeGoodPath = new Text(shell, SWT.BORDER);
-		tradeGoodPath.setBounds(137, 145, 243, 21);
+		tradeGoodPath.setBounds(20, 202, 243, 21);
 		formToolkit.adapt(tradeGoodPath, true, true);
 
 		trainedWeaponPath = new Text(shell, SWT.BORDER);
-		trainedWeaponPath.setBounds(137, 179, 243, 21);
+		trainedWeaponPath.setBounds(20, 250, 243, 21);
 		formToolkit.adapt(trainedWeaponPath, true, true);
 
 		Label lblEquipmentList = new Label(shell, SWT.NONE);
 		lblEquipmentList.setText("Equipment List:");
-		lblEquipmentList.setBounds(10, 210, 117, 15);
+		lblEquipmentList.setBounds(20, 277, 82, 15);
 		formToolkit.adapt(lblEquipmentList, true, true);
 
 		equipmentPath = new Text(shell, SWT.BORDER);
-		equipmentPath.setBounds(137, 210, 243, 21);
+		equipmentPath.setBounds(20, 298, 243, 21);
 		formToolkit.adapt(equipmentPath, true, true);
 
 		Button equipmentBrowse = new Button(shell, SWT.NONE);
 		equipmentBrowse.setText("Browse");
-		equipmentBrowse.setBounds(399, 210, 75, 25);
+		equipmentBrowse.setBounds(269, 296, 50, 25);
 		formToolkit.adapt(equipmentBrowse, true, true);
 		equipmentBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -267,16 +286,16 @@ public class UI {
 
 		Label lblBirthsignList = new Label(shell, SWT.NONE);
 		lblBirthsignList.setText("Birthsign List:");
-		lblBirthsignList.setBounds(10, 241, 117, 15);
+		lblBirthsignList.setBounds(20, 325, 71, 15);
 		formToolkit.adapt(lblBirthsignList, true, true);
 
 		birthSignPath = new Text(shell, SWT.BORDER);
-		birthSignPath.setBounds(137, 241, 243, 21);
+		birthSignPath.setBounds(20, 346, 243, 21);
 		formToolkit.adapt(birthSignPath, true, true);
 
 		Button birthSignBrowse = new Button(shell, SWT.NONE);
 		birthSignBrowse.setText("Browse");
-		birthSignBrowse.setBounds(399, 241, 75, 25);
+		birthSignBrowse.setBounds(269, 344, 50, 25);
 		formToolkit.adapt(birthSignBrowse, true, true);
 		birthSignBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -298,17 +317,21 @@ public class UI {
 		});
 
 		Label lblOutputDirectory = new Label(shell, SWT.NONE);
+		lblOutputDirectory.setBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_BACKGROUND));
+		lblOutputDirectory.setForeground(SWTResourceManager.getColor(0, 0, 0));
 		lblOutputDirectory.setText("Output Directory:");
-		lblOutputDirectory.setBounds(10, 272, 117, 15);
+		lblOutputDirectory.setBounds(20, 373, 92, 15);
 		formToolkit.adapt(lblOutputDirectory, true, true);
 
 		outputPath = new Text(shell, SWT.BORDER);
-		outputPath.setBounds(137, 272, 243, 21);
+		outputPath.setBackground(SWTResourceManager.getColor(SWT.COLOR_TRANSPARENT));
+		outputPath.setForeground(SWTResourceManager.getColor(0, 0, 0));
+		outputPath.setBounds(20, 394, 243, 21);
 		formToolkit.adapt(outputPath, true, true);
 
 		Button outputBrowse = new Button(shell, SWT.NONE);
 		outputBrowse.setText("Browse");
-		outputBrowse.setBounds(399, 272, 75, 25);
+		outputBrowse.setBounds(269, 392, 50, 25);
 		formToolkit.adapt(outputBrowse, true, true);
 		outputBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -331,6 +354,7 @@ public class UI {
 		});
 
 		Button btnBringOutMy = formToolkit.createButton(shell, "BRING OUT MY DEAD", SWT.NONE);
+		btnBringOutMy.setForeground(SWTResourceManager.getColor(0, 0, 0));
 		btnBringOutMy.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {// function that executes character generation
@@ -393,7 +417,7 @@ public class UI {
 			}
 		});
 
-		btnBringOutMy.setBounds(20, 304, 548, 25);
+		btnBringOutMy.setBounds(197, 421, 127, 25);
 
 	}
 
@@ -601,41 +625,55 @@ public class UI {
 	}
 
 	public void hitPointGeneration(PCharacter[] characters, int generationType) {
-		int[] ability;// hold reference to ability score array
+		int[] hpRoll;// hold reference to rolled HP
 		for (int i = 0; i < characters.length; i++) {
 			switch (generationType) {// decides which Hit Point generation method to use based on user selection
 
 			case 0:// 1d4
-				ability = Roller.rollSet(1, 4);
-				characters[i].setHP(ability[0] + characters[i].getAbilityMod(characters[i].getSTM()));
+				hpRoll = Roller.rollSet(1, 4);
+				characters[i].setHP(hpRoll[0] + characters[i].getAbilityMod(characters[i].getSTM()));
 
 				break;
 
 			case 1:// 1d4(reroll on 1)
-				ability = Roller.rollSet(1, 4);
-				while (ability[0] == 1) {
-					ability = Roller.rollSet(1, 4);
+				hpRoll = Roller.rollSet(1, 4);
+				while (hpRoll[0] == 1) {
+					hpRoll = Roller.rollSet(1, 4);
 
 				}
-				characters[i].setHP(ability[0] + characters[i].getAbilityMod(characters[i].getSTM()));
+				characters[i].setHP(hpRoll[0] + characters[i].getAbilityMod(characters[i].getSTM()));
 
 				break;
 
 			case 2:// 2d4 keep best
-				ability = Roller.rollSet(2, 4);
-				if (ability[0] < ability[1]) {
-					ability[0] = ability[1];
+				hpRoll = Roller.rollSet(2, 4);
+				if (hpRoll[0] < hpRoll[1]) {
+					hpRoll[0] = hpRoll[1];
 				}
-				characters[i].setHP(ability[0] + characters[i].getAbilityMod(characters[i].getSTM()));
+				characters[i].setHP(hpRoll[0] + characters[i].getAbilityMod(characters[i].getSTM()));
 
 				break;
 
 			case 3:// 1d2+2
-				ability = Roller.rollSet(1, 2);
-				characters[i].setHP(2 + ability[0] + characters[i].getAbilityMod(characters[i].getSTM()));
+				hpRoll = Roller.rollSet(1, 2);
+				characters[i].setHP(2 + hpRoll[0] + characters[i].getAbilityMod(characters[i].getSTM()));
+				break;
+				
+			case 4:// 1d4+2
+				hpRoll = Roller.rollSet(1, 4);
+				characters[i].setHP(2 + hpRoll[0] + characters[i].getAbilityMod(characters[i].getSTM()));
+				break;
+				
+			case 5:// Max
+				characters[i].setHP(4 + characters[i].getAbilityMod(characters[i].getSTM()));
 				break;
 
 			}// end HP switch
+			
+			if(characters[i].getHP() < 1) {
+				characters[i].setHP(1);
+			}
+			
 		} // end loop
 	}// end HPGen
 
@@ -678,10 +716,10 @@ public class UI {
 
 	public void setSecondaryStats(PCharacter[] characters) {
 		for (int i = 0; i < characters.length; i++) {
-			characters[i].setAC(10 + characters[i].getAbilityMod(characters[i].getAGI()));
-			characters[i].setReflex(characters[i].getAbilityMod(characters[i].getAGI()));
-			characters[i].setFort(characters[i].getAbilityMod(characters[i].getSTM()));
-			characters[i].setWill(characters[i].getAbilityMod(characters[i].getPER()));
+			characters[i].calculateAC();
+			characters[i].calculateReflex();
+			characters[i].calculateFort();
+			characters[i].calculateWill();
 		}
 	}
 
@@ -695,8 +733,7 @@ public class UI {
 		ListLoader bSign = new ListLoader(birthSign);
 		for (int i = 0; i < characters.length; i++) {
 			roll = Roller.rollSingle(1, bSign.getListLength());
-			characters[i].setBirthSign(
-					bSign.getItemAtIndex(roll) + "(" + characters[i].getAbilityMod(characters[i].getLUK()) + ")");
+			characters[i].setBirthSign(bSign.getItemAtIndex(roll));
 
 		}
 
@@ -710,30 +747,35 @@ public class UI {
 			ArrayList<String> inventory = characters[i].getInventory();
 			
 			writer.printf("Generator Settings\n");
-			writer.printf("Roll Mode: '%S' | HP Mode: '%S' \n\n", rollMode, HPMode);
-			writer.printf("Character: '%I'", characters[i].getNum());
-			writer.printf("Strength: '%I' ('%I')\n", characters[i].getSTR(),
+			writer.printf("Roll Mode: %s | HP Mode: %s \n\n", rollMode, HPMode);
+			writer.printf("Character: %d \n", characters[i].getNum());
+			writer.printf("Strength: %d (%d)\n", characters[i].getSTR(),
 					characters[i].getAbilityMod(characters[i].getSTR()));
-			writer.printf("Agility: '%I' ('%I')\n", characters[i].getAGI(),
+			writer.printf("Agility: %d (%d)\n", characters[i].getAGI(),
 					characters[i].getAbilityMod(characters[i].getAGI()));
-			writer.printf("Stamina: '%I' ('%I')\n", characters[i].getSTM(),
+			writer.printf("Stamina: %d (%d)\n", characters[i].getSTM(),
 					characters[i].getAbilityMod(characters[i].getSTM()));
-			writer.printf("Personality: '%I' ('%I')\n", characters[i].getPER(),
+			writer.printf("Personality: %d (%d)\n", characters[i].getPER(),
 					characters[i].getAbilityMod(characters[i].getPER()));
-			writer.printf("Intellegence: '%I' ('%I')\n", characters[i].getINT(),
+			writer.printf("Intellegence: %d (%d)\n", characters[i].getINT(),
 					characters[i].getAbilityMod(characters[i].getINT()));
-			writer.printf("Luck: '%I' ('%I')\n\n", characters[i].getLUK(),
+			writer.printf("Luck: %d (%d)\n\n", characters[i].getLUK(),
 					characters[i].getAbilityMod(characters[i].getLUK()));
-			writer.printf("AC: '%i'; HP: '%I'\n", characters[i].getAC(), characters[i].getHP());
-			writer.printf("Speed: 30; Init: '%I'; Ref; '%I'; Fort: '%I'; Will: '%I'\n\n", characters[i].getReflex(),
+			writer.printf("AC: %d; HP: %d\n", characters[i].getAC(), characters[i].getHP());
+			writer.printf("Speed: 30; Init: %d; Ref; %d; Fort: %d; Will: %d\n\n", characters[i].getReflex(),
 					characters[i].getReflex(), characters[i].getFort(), characters[i].getWill());
 			
+			writer.printf("Equipment: ");
+			
 			for(int j = 0; j < inventory.size(); j++) {
-				//writer.printf("Equipment: "%S)
+				writer.printf("%s, ", inventory.get(j));
 			}
 			
+			writer.print("\n\n");
+			writer.printf("Starting Funds: %d cp\n", characters[i].getCopper());
+			writer.printf("Lucky Sign: %s\n\n", characters[i].getBirthsign());
 			
-			//writer.printf("Equipment: '%S', '%S'", characters[i])
+			
 		}
 		writer.close();
 

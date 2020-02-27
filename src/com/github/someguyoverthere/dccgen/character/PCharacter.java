@@ -28,6 +28,7 @@ public class PCharacter {
 	private int number;
 	private String occupation;
 	private String birthSign;
+	private int Initiative;
 
 	public PCharacter() {// default constructor
 
@@ -184,6 +185,10 @@ public class PCharacter {
 	public void setAC(int aC) {
 		AC = aC;
 	}
+	
+	public void calculateAC() {
+		AC = 10 + getAbilityMod(getAGI());
+	}
 
 	public int getFort() {
 		return Fort;
@@ -192,13 +197,26 @@ public class PCharacter {
 	public void setFort(int fort) {
 		Fort = fort;
 	}
+	
+	public void calculateFort() {
+		Fort = getAbilityMod(getSTM());
+	}
+	
+	public void calculateInit() {
+		Initiative = getAbilityMod(getAGI());
+	}
 
 	public int getReflex() {
 		return Reflex;
 	}
 
+
 	public void setReflex(int reflex) {
 		Reflex = reflex;
+	}
+	
+	public void calculateReflex() {
+		Reflex = getAbilityMod(getAGI());
 	}
 
 	public int getWill() {
@@ -207,6 +225,10 @@ public class PCharacter {
 
 	public void setWill(int will) {
 		Will = will;
+	}
+	
+	public void calculateWill() {
+		Initiative = getAbilityMod(getPER());
 	}
 
 }
